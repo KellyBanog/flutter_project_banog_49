@@ -1,4 +1,3 @@
-import 'package:facebook/pages/maincustom.dart';
 import 'package:facebook/pages/newsfeed.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 6, 151, 235)),
         useMaterial3: true
       ),
-      home: const MainCustomPage(),
+      home: const Newsfeed(),
     );
   }
 }
