@@ -1,75 +1,101 @@
 import 'package:facebook/model/story_model.dart';
 import 'package:flutter/material.dart';
 
-class StoryModel {
-  final String id;
-  final String username;
-  final String profileImagePath;
-  final String storyImagePath;
-  final DateTime timestamp;
-  final bool isViewed;
+class StoryCard extends StatelessWidget {
+  final StoryModel story;
+  final VoidCallback? onTap;
+  final double width;
+  final double height;
 
-  StoryModel({
-    required this.id,
-    required this.username,
-    required this.profileImagePath,
-    required this.storyImagePath,
-    required this.timestamp,
-    required this.isViewed,
+  const StoryCard({
+    super.key,
+    required this.story,
+    this.onTap,
+    this.width = 120,
+    this.height = 200,
   });
 
-  String get timeAge {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'username': username,
-      'profileImagePath': profileImagePath,
-      'storyImagePath': storyImagePath,
-      'timestamp': timestamp.toIso8601String(),
-      'isViewed': isViewed,
-    };
-  }
-
-  factory StoryModel.fromJson(Map<String, dynamic> json) {
-    return StoryModel(
-      id: json['id'],
-      username: json['username'],
-      profileImagePath: json['profileImagePath'],
-      storyImagePath: json['storyImagePath'],
-      timestamp: DateTime.parse(json['timestamp']),
-      isViewed: json['isViewed'],
-    );
-  }
-
-  StoryModel copyWith({
-    String? id,
-    String? username,
-    String? profileImagePath,
-    String? storyImagePath,
-    DateTime? timestamp,
-    bool? isViewed,
-  }) {
-    return StoryModel(
-      id: id ?? this.id,
-      username: username ?? this.username,
-      profileImagePath: profileImagePath ?? this.profileImagePath,
-      storyImagePath: storyImagePath ?? this.storyImagePath,
-      timestamp: timestamp ?? this.timestamp,
-      isViewed: isViewed ?? this.isViewed,
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: story.isViewed
+              ? null
+              : const LinearGradient(
+                  colors: [Colors.purple, Colors.pink, Colors.orange],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+          border: story.isViewed
+              ? Border.all(color: Colors.grey.shade300, width: 2)
+              : null,
+        ),
+        child: Container(
+          margin: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage(story.storyImagePath),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                stops: const [0.6, 1.0],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                      image: DecorationImage(
+                        image: AssetImage(story.profileImagePath),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    story.username,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    story.timeAge,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
