@@ -18,13 +18,13 @@ class _MainCustomPageState extends State<MainCustomPage> {
 
   List pages = [
     Newsfeed(),
-    NotificationPage(),
+    FriendsPage(),
     ReelsPage(),
     MenuPage(),
+    NotificationPage(),
     MarketPlacePage(),
-    FriendsPage(),
   ];
-  //handle index
+  //handle index`
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;

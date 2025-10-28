@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 6, 151, 235)),
         useMaterial3: true
       ),
-      home: const NotificationPage(),
+      home: MainCustomPage(),
     );
   }
 }
